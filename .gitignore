@@ -1,0 +1,22 @@
+# Python virtual environment
+env/
+venv/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# IDE files
+.vscode/
+
+# Database files
+recipes.db
+Raw_recipes.csv
+
+# Environment variables (sensitive data)
+.env
+
+# Frontend dependencies and build files
+frontend/node_modules/
+frontend/dist/
+frontend/build/

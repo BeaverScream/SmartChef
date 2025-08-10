@@ -1,0 +1,21 @@
+# Data Processing and Analysis
+# These libraries are for cleaning and manipulating the raw recipe data.
+pandas
+
+# Database
+# This is for connecting to and interacting with the SQLite database.
+sqlalchemy
+
+# Web Framework
+# This is the core framework for building the backend API.
+Flask
+
+# LLM Integration
+# These libraries are for connecting to the Gemini LLM via LangChain.
+google-generativeai
+langchain
+langchain-google-genai
+
+# Environment Management
+# This library is for managing API keys and other sensitive data securely.
+python-dotenv
