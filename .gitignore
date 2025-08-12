@@ -12,6 +12,7 @@ __pycache__/
 # Database files
 recipes.db
 Raw_recipes.csv
+recipes_cleaned.csv
 
 # Environment variables (sensitive data)
 .env
