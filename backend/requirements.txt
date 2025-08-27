@@ -15,6 +15,15 @@ Flask
 google-generativeai
 langchain
 langchain-google-genai
+langchain-community
+
+# Vector Database
+# This is for the vector database to handle recipe embeddings efficiently.
+chromadb
+
+# HTTP Requests
+# This is for making API calls.
+requests
 
 # Environment Management
 # This library is for managing API keys and other sensitive data securely.
