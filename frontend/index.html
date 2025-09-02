@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartChef</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="flex items-center justify-center min-h-screen p-4 bg-gray-100 font-inter">
+
+    <!-- Main Content Container with Glassmorphism Effect -->
+    <div class="bg-white/80 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl w-full max-w-2xl p-8 space-y-8 border border-gray-200">
+        <header class="text-center">
+            <h1 class="text-4xl font-extrabold text-gray-800">SmartChef</h1>
+            <p class="mt-2 text-gray-600 text-sm md:text-base">Ask me anything about food and I'll give you a recommendation!</p>
+        </header>
+
+        <!-- Dietary Preference Checkboxes and Select All Button -->
+        <div class="flex flex-wrap justify-center gap-4 md:gap-6 items-center">
+            <label class="flex flex-col items-center p-3 sm:p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-200 cursor-pointer transition-transform duration-200 hover:scale-105">
+                <input type="checkbox" id="meatBased" name="diet" value="meat-based" class="hidden peer">
+                <i class="fa-solid fa-drumstick-bite text-2xl mb-2 text-gray-500 peer-checked:text-blue-600 transition-colors"></i>
+                <span class="text-sm font-semibold text-gray-700 select-none">Meat-Based</span>
+            </label>
+            <label class="flex flex-col items-center p-3 sm:p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-200 cursor-pointer transition-transform duration-200 hover:scale-105">
+                <input type="checkbox" id="vegetarian" name="diet" value="vegetarian" class="hidden peer">
+                <i class="fa-solid fa-leaf text-2xl mb-2 text-gray-500 peer-checked:text-green-600 transition-colors"></i>
+                <span class="text-sm font-semibold text-gray-700 select-none">Vegetarian</span>
+            </label>
+            <label class="flex flex-col items-center p-3 sm:p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-200 cursor-pointer transition-transform duration-200 hover:scale-105">
+                <input type="checkbox" id="vegan" name="diet" value="vegan" class="hidden peer">
+                <i class="fa-solid fa-seedling text-2xl mb-2 text-gray-500 peer-checked:text-purple-600 transition-colors"></i>
+                <span class="text-sm font-semibold text-gray-700 select-none">Vegan</span>
+            </label>
+            <label class="flex flex-col items-center p-3 sm:p-4 bg-gray-50 rounded-xl shadow-inner border border-gray-200 cursor-pointer transition-transform duration-200 hover:scale-105">
+                <input type="checkbox" id="pescetarian" name="diet" value="pescetarian" class="hidden peer">
+                <i class="fa-solid fa-fish-fins text-2xl mb-2 text-gray-500 peer-checked:text-pink-600 transition-colors"></i>
+                <span class="text-sm font-semibold text-gray-700 select-none">Pescetarian</span>
+            </label>
+            <button id="selectAllBtn" class="flex items-center justify-center py-2 px-4 bg-blue-600 text-white font-semibold rounded-xl shadow-md hover:bg-blue-700 transition-colors duration-200">
+                Select All
+            </button>
+        </div>
+
+        <!-- User Input Section -->
+        <div class="space-y-4">
+            <textarea id="userInput" rows="4" placeholder="e.g., A quick weeknight dinner recipe or a list of ingredients for a hearty stew."
+                      class="w-full p-4 text-gray-700 placeholder-gray-400 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 shadow-sm"></textarea>
+            <button id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200 shadow-lg hover:shadow-xl">
+                Get Recommendation
+            </button>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="hidden flex justify-center items-center">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+            <span class="ml-3 text-gray-500">Cooking up a response...</span>
+        </div>
+
+        <!-- LLM Response Area -->
+        <div id="responseContainer" class="hidden">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Your Recommendation</h2>
+            <div id="responseOutput" class="p-6 bg-gray-50 border border-gray-200 rounded-xl text-gray-700 leading-relaxed scroll-container max-h-96 overflow-y-auto shadow-inner">
+                <!-- Response content will be injected here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Custom Script File -->
+    <script src="script.js"></script>
+
+</body>
+</html>

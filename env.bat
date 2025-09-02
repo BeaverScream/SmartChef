@@ -1,1 +1,2 @@
-venv\Scripts\activate
+@echo off
+call env\Scripts\activate.bat

@@ -32,9 +32,8 @@ The cleaning logic is inside `data_cleaning.ipynb`. I used Jupyter notebook for 
 
 ## Phase 3: Frontend and UI Design
 
-...UPDATE REQUIRED LATER...
-
-The user interacts with a frontend interface. When a user submits a text query, the backend processes it.
+For now, I used AI to generate simple frontend design for functional check (will be updated later). 
+When a user submits a text query, the backend (not done yet) will feed to LLM and return a list of recipes in the database that meets the user request
 
 ## Phase 4: Testing
 
