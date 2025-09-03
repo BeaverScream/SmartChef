@@ -32,8 +32,11 @@ The cleaning logic is inside `data_cleaning.ipynb`. I used Jupyter notebook for 
 
 ## Phase 3: Frontend and UI Design
 
+...UPDATE REQUIRED LATER...
+
 Now, React is implemented with the simple function. It's not communicating with the backend yet but when a user enters a text in the text box and then press the get recommendation button, it returns the simulated recipes in a list format. 
 Next step is to work on the backend side so it processes user's request and get the response back.
+
 
 ## Phase 4: Testing
 
