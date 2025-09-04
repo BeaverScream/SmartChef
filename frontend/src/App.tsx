@@ -44,10 +44,27 @@ function App() {
   };
 
   const handleSubmit = async () => {
-    if (!userInput.trim()) {
-      setFeedback('Please enter a food query before getting a recommendation.');
-      setTimeout(() => setFeedback(''), 3000);
-      return;
+  
+    const hasUserInput = userInput.trim().length > 3;
+    const hasPreferences = dietaryPreferences.length > 0
+
+    // Handle feedback for the three cases
+    if (!hasUserInput && !hasPreferences) {
+        setFeedback('Please provide a food query and select at least one dietary preference.');
+        setTimeout(() => setFeedback(''), 3000);
+        return;
+    }
+
+    if (!hasUserInput) {
+        setFeedback('Please enter a text input before getting recommendations.');
+        setTimeout(() => setFeedback(''), 3000);
+        return;
+    }
+
+    if (!hasPreferences) {
+        setFeedback('Please select at least one dietary preference.');
+        setTimeout(() => setFeedback(''), 3000);
+        return;
     }
 
     setLoading(true);
@@ -57,8 +74,12 @@ function App() {
     ///////////// TODO //////////////
     // This is where you would typically send the data to your server.
     // For now, it will stay like this.
-    console.log('User Input:', userInput);
-    console.log('Dietary Preferences:', dietaryPreferences);
+    const requestData = {
+      query: userInput,
+      dietary_preference: dietaryPreferences
+    }
+
+    console.log('User request:', requestData);
 
     // Simulate a network request with a delay
     await new Promise(resolve => setTimeout(resolve, 2000));
