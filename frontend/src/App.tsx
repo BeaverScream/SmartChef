@@ -3,10 +3,12 @@ import Header from './components/Header';
 import DietaryPreferenceCheckBox from './components/DietaryPreferencesCheckBoxes';
 import UserInputTextBox from './components/UserInputTextBox';
 import SubmitButton from './components/SubmitButton';
+import ReturnedRecipeList from './components/ReturnedRecipeList';
 
-interface Recipe {
+export interface Recipe {
   name: string;
   ingredients: string[];
+  nutrition: number[];
   instructions: string;
 }
 
@@ -52,9 +54,9 @@ function App() {
     setRecipes(null); // Clear previous recipes
     setFeedback(''); // Clear any previous feedback
 
-    /////////////TODO//////////////
+    ///////////// TODO //////////////
     // This is where you would typically send the data to your server.
-    // For now, it will stay like this. TODO
+    // For now, it will stay like this.
     console.log('User Input:', userInput);
     console.log('Dietary Preferences:', dietaryPreferences);
 
@@ -72,6 +74,7 @@ function App() {
           '1/4 cup olive oil',
           'Salt and pepper to taste'
         ],
+        nutrition: [400.5, 12.0, 5.0, 50.0, 15.0, 3.0, 8.0],
         instructions: 'Cook pasta according to package directions. In a large skillet, sauté vegetables and garlic in olive oil. Drain pasta, add to skillet, and toss to combine. Season with salt and pepper. Serve immediately.'
       },
       {
@@ -86,6 +89,7 @@ function App() {
           '1 tsp cumin',
           'Salt and pepper to taste'
         ],
+        nutrition: [250.0, 2.0, 0.0, 40.0, 10.0, 15.0, 6.0],
         instructions: 'Heat olive oil in a pot over medium heat. Add onion, carrots, and celery and cook until soft. Stir in lentils, vegetable broth, and cumin. Bring to a boil, then reduce heat and simmer for 30 minutes, or until lentils are tender. Season with salt and pepper before serving.'
       },
       {
@@ -97,13 +101,14 @@ function App() {
           '1 lemon, sliced',
           'Salt and black pepper'
         ],
+        nutrition: [350.5, 25.0, 18.0, 10.0, 1.0, 2.0, 10.0],
         instructions: 'Preheat oven to 400°F (200°C). Place salmon and asparagus on a baking sheet. Drizzle with olive oil, season with salt and pepper, and top with lemon slices. Roast for 12-15 minutes, or until salmon is cooked through.'
       }
     ];
 
     //////////////////////////////////////////////
 
-    ////////TODO/////////
+    //////// TODO /////////
     setRecipes(simulatedRecipes);
     setLoading(false);
     setUserInput('');
@@ -136,33 +141,13 @@ function App() {
           loading = {loading}
           handleSubmit = {handleSubmit}
         />
-      </div>
         
         {/* Recipes display area */}
-        {recipes && (
-          <div id="responseContainer">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Your Recommendations</h2>
-            <div id="responseOutput" className="p-6 bg-gray-50 border border-gray-200 rounded-xl text-gray-700 leading-relaxed scroll-container max-h-96 overflow-y-auto shadow-inner space-y-8">
-              {recipes.map((recipe, index) => (
-                <div key={index} className="p-4 rounded-xl bg-white shadow-md border border-gray-100">
-                  <h3 className="text-xl font-bold text-gray-900">{recipe.name}</h3>
-                  <div className="mt-2">
-                    <h4 className="font-semibold text-gray-800">Ingredients:</h4>
-                    <ul className="list-disc list-inside mt-1 space-y-1">
-                      {recipe.ingredients.map((ingredient, i) => (
-                        <li key={i}>{ingredient}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="mt-4">
-                    <h4 className="font-semibold text-gray-800">Instructions:</h4>
-                    <p className="mt-1">{recipe.instructions}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        <ReturnedRecipeList
+          recipes = {recipes} // Placeholder for visual testing
+        />
+        
+      </div>
     </div>
   );
 }
