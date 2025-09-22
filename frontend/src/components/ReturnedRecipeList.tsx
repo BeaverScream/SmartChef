@@ -1,6 +1,6 @@
 // src/components/ReturnedRecipeList.tsx
 
-import React from 'react';
+// import React from 'react';
 import { type Recipe } from '../App';
 
 // Define the Daily Recommended Values (DV) for an average adult.

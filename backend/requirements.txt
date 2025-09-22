@@ -9,6 +9,7 @@ sqlalchemy
 # Web Framework
 # This is the core framework for building the backend API.
 Flask
+Flask-Cors
 
 # LLM Integration
 # These libraries are for connecting to the Gemini LLM via LangChain.

@@ -167,7 +167,7 @@ function App() {
         <ReturnedRecipeList
           recipes = {recipes} // Placeholder for visual testing
         />
-        
+
       </div>
     </div>
   );
