@@ -11,7 +11,7 @@ sqlalchemy
 Flask
 Flask-Cors
 
-# LLM Integration
+# LLM Integration (Gemini)
 # These libraries are for connecting to the Gemini LLM via LangChain.
 google-generativeai
 langchain
@@ -19,8 +19,8 @@ langchain-google-genai
 langchain-community
 
 # Vector Database
-# This is for the vector database to handle recipe embeddings efficiently.
-chromadb
+# This is for the high-performance Faiss vector index to handle recipe embeddings efficiently.
+faiss-cpu
 
 # HTTP Requests
 # This is for making API calls.
@@ -29,3 +29,9 @@ requests
 # Environment Management
 # This library is for managing API keys and other sensitive data securely.
 python-dotenv
+
+
+# Hugging Face LLM
+# These are for local embedding generation to avoid API quotas.
+sentence-transformers
+torch

@@ -24,7 +24,11 @@ The cleaning logic is inside `data_cleaning.ipynb`. I used Jupyter notebook for 
     * **meal_type**: has 3 categories, meal, side-dish, dessert
     * **food_type**: has 5 categories, vegetarian, vegan, meat-base, pescetarian, uncategorized
 
-2. **Categorizing using LLM**: Some people have strict dietary restrictions and this can be frustrating if recommended recipes do not suit their needs. The manual filtering couldn't categorize all the remaining recipes so I decided to use LLM to categorize `uncategorized` recipes for me. This requires to get an API key of LLM and preparing prompt to feed to the LLM. ...UPDATE REQUIRED LATER...
+~~2. **Categorizing using LLM**: Some people have strict dietary restrictions and this can be frustrating if recommended recipes do not suit their needs. The manual filtering couldn't categorize all the remaining recipes so I decided to use LLM to categorize `uncategorized` recipes for me. This requires to get an API key of LLM and preparing prompt to feed to the LLM.~~ 
+
+2. **Create embedding and the vector index for the sampled food recipes**: I decided to narrow the data scope. I only sampled 6000 food recipes and will generate embedding using all-MiniLM-L6-v2 instead of gemini to avoid api limit and slow processing speed. For the next step, I'll create the vector index for the sampled food recipes using Faiss. As the database will not be updated, I think Faiss is a better choice for my project than using chromaDB. 
+
+...UPDATE REQUIRED LATER...
 
 ## Phase 2: Building Database and Connecting to Backend Logic
 
