@@ -2,6 +2,11 @@ import sqlite3
 import pandas as pd
 import json
 import ast
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+csv_path = os.path.join(BASE_DIR, "data", "df_sampled_6000_MiniLM.csv")
+db_path = os.path.join(BASE_DIR, "data", "recipes.db")
 
 def create_and_load_db(filename: str, db_name: str="recipes.db"):
     """
@@ -10,7 +15,8 @@ def create_and_load_db(filename: str, db_name: str="recipes.db"):
 
     print(f"Starting to create and load database from '{filename}'...")
 
-    conn = sqlite3.connect(db_name)
+    conn = sqlite3.connect(db_path)
+    print(f"Database will be created at: {db_path}")
     cursor = conn.cursor()
     
     try:
@@ -78,6 +84,7 @@ def create_and_load_db(filename: str, db_name: str="recipes.db"):
         conn.rollback() # Hopefully, it doesn't reach here...
     finally:
         conn.close() # To make sure connection is closed
+        print(f"Connection closed.")
         
 if __name__ == "__main__":
-    create_and_load_db("df_sampled_6000_MiniLM.csv")
+    create_and_load_db(csv_path)

@@ -14,8 +14,9 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # -------Initialization-----------------
-DB_PATH = 'data/recipes.db'
-BASE_FAISS_DIR = 'data'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, 'data', 'recipes.db')
+BASE_FAISS_DIR = os.path.join(BASE_DIR, 'data') 
 TOP_K_RESULT = 10 # number of recipes to retrieve
 
 try:
@@ -57,7 +58,7 @@ def parse_recipe_data(recipe_row: sqlite3.Row) -> Optional[Dict[str, Any]]:
             'name': recipe_row['name'],
             'ingredients': ingredient_list,
             'nutrition': nutrition_list,
-            'instructions': recipe_row['instructions']
+            'instructions': recipe_row['steps']
         }
     except Exception as e:
         logger.error(f"Error parsing recipe data for recipe: {recipe_row['id'] if 'id' in recipe_row else 'unknown'}: {e}")
@@ -94,7 +95,7 @@ def get_recipes():
         dietary_pref.sort()
         file_key = "_".join(dietary_pref)
         faiss_file_path = os.path.join(BASE_FAISS_DIR, f'faiss_{file_key}.bin')
-        
+        print(f"Faiss index file path: {faiss_file_path}")
         current_faiss_index = None
         
         try:
@@ -122,7 +123,7 @@ def get_recipes():
         # Query set up/execution
         placeholder = ','.join('?' * len(db_recipe_ids))
         sql_retrieve_result_query = f"""
-            SELECT id, name, ingredients, nutrition, instructions
+            SELECT id, name, ingredients, nutrition, steps
             FROM recipes
             WHERE id IN ({placeholder})
         """

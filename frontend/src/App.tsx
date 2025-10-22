@@ -19,9 +19,8 @@ function App() {
   const [recipes, setRecipes] = useState<Recipe[] | null>(null);
   const [feedback, setFeedback] = useState<string>('');
 
-  // Current dietOptions. 
   const dietOptions = [
-        { id: 'meatBased', value: 'meat-based', icon: 'fa-drumstick-bite', color: 'blue', label: 'Meat-Based' },
+        { id: 'meatBased', value: 'meat-base', icon: 'fa-drumstick-bite', color: 'blue', label: 'Meat-Base' },
         { id: 'vegetarian', value: 'vegetarian', icon: 'fa-leaf', color: 'green', label: 'Vegetarian' },
         { id: 'vegan', value: 'vegan', icon: 'fa-seedling', color: 'purple', label: 'Vegan' },
         { id: 'pescetarian', value: 'pescetarian', icon: 'fa-fish-fins', color: 'pink', label: 'Pescetarian' },
@@ -44,11 +43,9 @@ function App() {
   };
 
   const handleSubmit = async () => {
-  
     const hasUserInput = userInput.trim().length > 3;
     const hasPreferences = dietaryPreferences.length > 0
 
-    // Handle feedback for the three cases
     if (!hasUserInput && !hasPreferences) {
         setFeedback('Please provide a food query and select at least one dietary preference.');
         setTimeout(() => setFeedback(''), 3000);
@@ -71,9 +68,6 @@ function App() {
     setRecipes(null); // Clear previous recipes
     setFeedback(''); // Clear any previous feedback
 
-    ///////////// TODO //////////////
-    // This is where you would typically send the data to your server.
-    // For now, it will stay like this.
     const requestData = {
       query: userInput,
       dietary_preference: dietaryPreferences
@@ -81,61 +75,44 @@ function App() {
 
     console.log('User request:', requestData);
 
-    // Simulate a network request with a delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // Simulate a structured JSON response from the server
-    const simulatedRecipes: Recipe[] = [
-      {
-        name: 'Quick Pasta Primavera',
-        ingredients: [
-          '200g pasta',
-          '1 cup mixed vegetables (broccoli, bell peppers, carrots)',
-          '2 cloves garlic, minced',
-          '1/4 cup olive oil',
-          'Salt and pepper to taste'
-        ],
-        nutrition: [400.5, 12.0, 5.0, 50.0, 15.0, 3.0, 8.0],
-        instructions: 'Cook pasta according to package directions. In a large skillet, sauté vegetables and garlic in olive oil. Drain pasta, add to skillet, and toss to combine. Season with salt and pepper. Serve immediately.'
-      },
-      {
-        name: 'Easy Vegan Lentil Soup',
-        ingredients: [
-          '1 tbsp olive oil',
-          '1 onion, chopped',
-          '2 carrots, chopped',
-          '2 celery stalks, chopped',
-          '1 cup brown or green lentils',
-          '4 cups vegetable broth',
-          '1 tsp cumin',
-          'Salt and pepper to taste'
-        ],
-        nutrition: [250.0, 2.0, 0.0, 40.0, 10.0, 15.0, 6.0],
-        instructions: 'Heat olive oil in a pot over medium heat. Add onion, carrots, and celery and cook until soft. Stir in lentils, vegetable broth, and cumin. Bring to a boil, then reduce heat and simmer for 30 minutes, or until lentils are tender. Season with salt and pepper before serving.'
-      },
-      {
-        name: 'Simple Salmon with Asparagus',
-        ingredients: [
-          '2 salmon fillets',
-          '1 bunch asparagus, trimmed',
-          '1 tbsp olive oil',
-          '1 lemon, sliced',
-          'Salt and black pepper'
-        ],
-        nutrition: [350.5, 25.0, 18.0, 10.0, 1.0, 2.0, 10.0],
-        instructions: 'Preheat oven to 400°F (200°C). Place salmon and asparagus on a baking sheet. Drizzle with olive oil, season with salt and pepper, and top with lemon slices. Roast for 12-15 minutes, or until salmon is cooked through.'
+    try {
+      console.info('Sending request to backend...', { userInput, dietaryPreferences });
+
+      const response = await fetch('http://127.0.0.1:5000/api/get-recipes', {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({
+          query: userInput,
+          dietary_preference: dietaryPreferences,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData =await response.json().catch(() => ({}));
+        console.error('Backend returned error:', errorData);
+        setFeedback(errorData || 'Server error occured');
+        setLoading(false);
+        return;
       }
-    ];
 
-    //////////////////////////////////////////////
+      const data = await response.json();
+      console.info('Response from backend:', data)
 
-    //////// TODO /////////
-    setRecipes(simulatedRecipes);
-    setLoading(false);
-    setUserInput('');
+      if (data.recipes && data.recipes.length > 0) {
+        setRecipes(data.recipes);
+      } else {
+        setFeedback('No recipes found for your query');
+        setRecipes([])
+      }
+    } catch (error) {
+      console.error('Network or fetch error:', error);
+      setFeedback('Failed to connect to the server. Please try again.');
+    } finally {
+      setLoading(false);
+      // setUserInput('');
+    }
+
   };
-
-  //////////////////////////////////////
 
   return (
     <div className="bg-gray-100 font-inter min-h-screen p-4 flex items-center justify-center">
@@ -165,7 +142,7 @@ function App() {
         
         {/* Recipes display area */}
         <ReturnedRecipeList
-          recipes = {recipes} // Placeholder for visual testing
+          recipes = {recipes} 
         />
 
       </div>
