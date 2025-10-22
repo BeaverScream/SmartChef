@@ -7,6 +7,7 @@ import numpy as np
 import os
 import logging
 import numpy as np
+from typing import Optional, Dict, Any
 
 # -------Setting up logging-----------------
 logging.basicConfig(level=logging.INFO)
@@ -26,6 +27,7 @@ except Exception as e:
     EMBEDDING_MODEL = None
     D_VECTOR = 384
 
+FAISS_INDEX = None
 try:
     if os.path.exists(FAISS_INDEX_PATH):
         logger.info(f"Loading Faiss index from {FAISS_INDEX_PATH}")
@@ -35,24 +37,40 @@ try:
         logger.error(f"Faiss index file not found at {FAISS_INDEX_PATH}")
 except Exception as e:
     print(f"Error occured while loading Faiss index: {e}")
-    FAISS_INDEX = None
 
 # --------Helper functions-----------------
 
-def get_db_connection():
-    conn = sqlite3.connect(DB_PATH)
+def get_db_connection() -> sqlite3.Connection:
+    conn = sqlite3.connect(DB_PATH) # to set dictionary like format
     conn.row_factory = sqlite3.Row
     return conn
 
-def decod_vector_from_db(vector_data):
+def decode_vector_from_db(vector_data) -> np.ndarray:
     if isinstance(vector_data, str):
         try:
             return np.array([float(x) for x in vector_data.split(',')], dtype='float')
         except ValueError as e:
             logger.error(f"Failed to parse vector string: {e}")
             return np.zeros(D_VECTOR, dtype='float32')
-    return np.zeroes(D_VECTOR, dtype='float32')
+    return np.zeros(D_VECTOR, dtype='float32')
 
+def parse_recipe_data(recipe_row: sqlite3.Row) -> Optional[Dict[str, Any]]:
+    try:
+        ingredient_list = recipe_row['ingredients'].split('|') if recipe_row['ingredients'] else []
+        nutrition_list = []
+        if recipe_row['nutrition']:
+            nutrition_list = [float(x.strip()) for x in recipe_row['nutrition'].split(',')]
+        
+        return {
+            'name': recipe_row['name'],
+            'ingredient': ingredient_list,
+            'nutrition': nutrition_list,
+            'instructions': recipe_row['instructions']
+        }
+    except Exception as e:
+        logger.error(f"Error parsing recipe data for recipe: {recipe_row['id'] if recipe_row else 'unknown'}")
+        return None
+        
 # --------Flask app set up-----------------
 app = Flask(__name__)
 
@@ -61,15 +79,11 @@ CORS(app) # TODO: will update this later
 # --------API end point--------------------
 @app.route('/api/get-recipes', method=['POST'])
 def get_recipes():
-    """
-    Receives user input and dietary preferences, performs hybrid SQL + Vector search, 
-    and returns a list of recipes.
-    """
     
     if not request.is_json:
-        return jsonify({"error:" : "Request must be JSON"}), 400
+        return jsonify({"error" : "Request must be JSON"}), 400
 
-    data = request.get_json()
+    data = request.get_json() # data received has two keys
     user_input = data.get('query')
     dietary_pref = data.get('dietary_preference')
     
@@ -82,12 +96,13 @@ def get_recipes():
     conn = None
     try:
         query_vector = EMBEDDING_MODEL.encode(user_input, convert_to_tensor=False)
-        query_vector = np.expand_dims(query_vector, axis=0)
+        query_vector = np.expand_dims(query_vector, axis=0).astype('float32')
     
         conn = get_db_connection()
         cursor = conn.cursor()
         
         logger.info(f"Performing SQL filter for preference: {dietary_pref}")
+        
         # Filtering logic
         placeholder = ','.join('?' * len(dietary_pref))
         sql_filter_query = f"""
